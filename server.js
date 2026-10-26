@@ -5,15 +5,19 @@ const QRCode = require('qrcode');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const express = require('express');
+const express = require('express');
 const path = require('path');
 
-// 1. Tell Express to serve static assets from the public folder
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from the public directory explicitly
+app.use(express.static('public'));
 
-// 2. Fallback route handler: Serve index.html for the root domain and all front-end routing
+// Fallback to serve index.html for any frontend route requests
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.resolve('public', 'index.html'));
 });
+
+
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
