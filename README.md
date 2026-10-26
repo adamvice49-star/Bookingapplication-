@@ -10,6 +10,8 @@ A responsive bus and train booking demo built with Express, Bootstrap, and brows
 
 If you use VS Code Live Server (for example, `http://127.0.0.1:5500`) to serve the `public` folder, keep the Express server running with `npm start` as well. The frontend automatically sends API requests to port 5000 on the same local host in that setup.
 
+On Vercel, API requests are handled by the catch-all function in `api/[...path].js`, which reuses the Express routes in `server.js`.
+
 ## Booking flow
 
 - Sign in with a name and 10-digit mobile number. The app generates an OTP and displays it on screen for this demo; enter that code to continue.
