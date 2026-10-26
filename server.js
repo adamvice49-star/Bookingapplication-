@@ -2,24 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const QRCode = require('qrcode');
-const app = express();
-const PORT = process.env.PORT || 5000;
-const express = require('express');
-const express = require('express');
 const path = require('path');
 
-// Serve static files from the public directory explicitly
-app.use(express.static('public'));
+const app = express();
 
-// Fallback to serve index.html for any frontend route requests
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve('public', 'index.html'));
-});
-
-
-
+// Middlewares
 app.use(cors());
 app.use(bodyParser.json());
+
+// Serve static files from the public directory explicitly
 app.use(express.static('public'));
 
 // In-memory storage for OTPs and user sessions
@@ -39,7 +30,6 @@ app.post('/api/login', (req, res) => {
     }
     const otp = generateOTP();
     userSessions[mobile] = { username, otp };
-    // In a real application, you would send the OTP via SMS
     return res.status(200).json({ message: 'OTP generated successfully.', otp });
 });
 
@@ -51,11 +41,11 @@ app.post('/api/verify-otp', (req, res) => {
     if (!/^\d{10}$/.test(mobile) || !/^\d{6}$/.test(otp) || !session || session.otp !== otp) {
         return res.status(400).json({ error: 'Invalid OTP.' });
     }
-    // OTP verified, redirect to home page
     delete userSessions[mobile]; // Clear session after verification
     return res.status(200).json({ message: 'Login successful.', username: session.username });
 });
 
+// API to generate QR
 app.post('/api/qr', async (req, res) => {
     const data = req.body?.data;
     if (typeof data !== 'string' || !data.trim() || data.length > 256) {
@@ -71,6 +61,12 @@ app.post('/api/qr', async (req, res) => {
     }
 });
 
+// Fallback to serve index.html for any frontend route requests (PLACED AT BOTTOM)
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve('public', 'index.html'));
+});
+
+// Global Error Handler
 app.use((error, req, res, next) => {
     if (req.path.startsWith('/api/')) {
         if (error.type === 'entity.too.large') {
@@ -85,11 +81,13 @@ app.use((error, req, res, next) => {
     return next(error);
 });
 
-// Start the server
+// Start the server locally
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running locally on port ${PORT}`);
   });
 }
+
+// Export the app object for Vercel Serverless
 module.exports = app;
