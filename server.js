@@ -13,9 +13,6 @@ app.use(bodyParser.json());
 // Serve static files from the public directory explicitly
 app.use(express.static('public'));
 
-// In-memory storage for OTPs and user sessions
-const userSessions = {};
-
 // Generate a random OTP
 function generateOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString();
@@ -29,20 +26,7 @@ app.post('/api/login', (req, res) => {
         return res.status(400).json({ error: 'Enter a name and a valid 10-digit mobile number.' });
     }
     const otp = generateOTP();
-    userSessions[mobile] = { username, otp };
     return res.status(200).json({ message: 'OTP generated successfully.', otp });
-});
-
-// API to verify OTP
-app.post('/api/verify-otp', (req, res) => {
-    const mobile = typeof req.body?.mobile === 'string' ? req.body.mobile.trim() : '';
-    const otp = typeof req.body?.otp === 'string' ? req.body.otp.trim() : '';
-    const session = userSessions[mobile];
-    if (!/^\d{10}$/.test(mobile) || !/^\d{6}$/.test(otp) || !session || session.otp !== otp) {
-        return res.status(400).json({ error: 'Invalid OTP.' });
-    }
-    delete userSessions[mobile]; // Clear session after verification
-    return res.status(200).json({ message: 'Login successful.', username: session.username });
 });
 
 // API to generate QR
@@ -59,6 +43,10 @@ app.post('/api/qr', async (req, res) => {
         console.error('Could not generate QR code:', error);
         return res.status(500).json({ error: 'Could not generate a QR code.' });
     }
+});
+
+app.use('/api', (req, res) => {
+    return res.status(404).json({ error: 'API route not found.' });
 });
 
 // Fallback to serve index.html for any frontend route requests (PLACED AT BOTTOM)

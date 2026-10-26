@@ -20,4 +20,4 @@ On Vercel, API requests are handled by the catch-all function in `api/[...path].
 - The QR code is generated locally and contains sample booking data only. **Payment is simulated; this demo does not process payments or reserve real seats.**
 - Choose **Download ticket PDF** and save the print dialog output as a PDF.
 
-Login and booking information are kept in `sessionStorage` for the current browser tab and are cleared when you log out or close the tab. The in-memory OTP endpoint and displayed OTP are for local demonstration only, not production authentication.
+Login and booking information are kept in `sessionStorage` for the current browser tab and are cleared when you log out or close the tab. The demo OTP is displayed in the browser and verified there, so this flow does not provide production authentication.

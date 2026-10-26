@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = document.getElementById('loginButton');
     const buttonLabel = button.querySelector('.button-label');
     const spinner = button.querySelector('.spinner-border');
-    let generatedOtp = false;
+    let generatedOtp = '';
 
     function showMessage(text, type) {
         message.textContent = text;
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!/^\d{6}$/.test(String(result.otp || ''))) {
                     throw new Error('The server did not return a valid one-time code. Please try again.');
                 }
-                generatedOtp = true;
+                generatedOtp = String(result.otp);
                 usernameInput.readOnly = true;
                 mobileInput.readOnly = true;
                 otpInput.required = true;
@@ -93,24 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        setLoading(true, 'Verifying…');
-        try {
-            const response = await fetch(apiUrl('/api/verify-otp'), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mobile: mobileInput.value.trim(), otp: otpInput.value.trim() })
-            });
-            const result = await readApiResponse(response);
-            sessionStorage.setItem('wayfarer.user', JSON.stringify({
-                username: result.username,
-                mobile: mobileInput.value.trim()
-            }));
-            showMessage('Login successful! Taking you to your trips…', 'success');
-            buttonLabel.textContent = 'You’re all set';
-            window.setTimeout(() => window.location.replace('index.html'), 700);
-        } catch (error) {
-            showMessage(error.message, 'danger');
-            setLoading(false, 'Verify & continue');
+        if (otpInput.value.trim() !== generatedOtp) {
+            showMessage('Invalid OTP.', 'danger');
+            return;
         }
+
+        sessionStorage.setItem('wayfarer.user', JSON.stringify({
+            username: usernameInput.value.trim(),
+            mobile: mobileInput.value.trim()
+        }));
+        showMessage('Login successful! Taking you to your trips…', 'success');
+        buttonLabel.textContent = 'You’re all set';
+        window.setTimeout(() => window.location.replace('index.html'), 700);
     });
 });
