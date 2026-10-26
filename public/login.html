@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10100f">
+    <title>Sign in — Ragul Agency</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="login-page">
+    <main class="login-shell">
+        <section class="login-art">
+            <a class="navbar-brand login-brand" href="login.html"><span class="brand-mark">RA</span><span>ragul <b>agency</b></span></a>
+            <div class="login-art-copy">
+                <span class="eyebrow">TRAVEL, ELEVATED</span>
+                <h1>Arrive in<br><span>your style.</span></h1>
+                <p>Discover considered journeys and a more beautiful way to get there.</p>
+            </div>
+            <div class="art-landscape" aria-hidden="true"><span class="art-sun"></span><span class="art-hill art-hill-one"></span><span class="art-hill art-hill-two"></span><span class="art-road"></span><span class="art-bus"><i></i><i></i></span></div>
+            <p class="art-caption">Ragul Agency · Your journey, beautifully planned.</p>
+        </section>
+        <section class="login-content">
+            <div class="login-card">
+                <span class="eyebrow">WELCOME TO RAGUL AGENCY</span>
+                <h2>Your next journey awaits</h2>
+                <p class="login-intro">Enter your details and we’ll create a one-time code for this demo.</p>
+                <form id="loginForm" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label" for="username">Your name</label>
+                        <input class="form-control" type="text" id="username" name="username" placeholder="e.g. Alex Morgan" autocomplete="name" minlength="3" maxlength="60" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="mobile">Mobile number</label>
+                        <div class="input-group">
+                            <span class="input-group-text">+91</span>
+                            <input class="form-control" type="tel" id="mobile" name="mobile" placeholder="10-digit mobile number" autocomplete="tel-national" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div id="otpSection" class="mb-3 d-none">
+                        <label class="form-label" for="otp">One-time password</label>
+                        <input class="form-control otp-input" type="text" id="otp" name="otp" placeholder="Enter 6-digit code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6">
+                        <div id="demoOtp" class="demo-otp d-none"></div>
+                    </div>
+                    <div id="loginMessage" class="alert d-none" role="status" aria-live="polite"></div>
+                    <button class="btn btn-primary login-submit w-100" type="submit" id="loginButton">
+                        <span class="button-label">Get one-time code</span>
+                        <span class="spinner-border spinner-border-sm d-none" aria-hidden="true"></span>
+                    </button>
+                </form>
+                <p class="login-footnote">Demo app only · OTP is displayed here and no SMS is sent.</p>
+            </div>
+        </section>
+    </main>
+    <script src="js/app.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
