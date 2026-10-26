@@ -18,7 +18,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        const isLoginPage = window.location.pathname.endsWith('/login.html') || window.location.pathname.endsWith('login.html');
+        // This checks for clean URLs (/login) as well as traditional extensions (.html)
+        const isLoginPage = window.location.pathname.includes('login');
+
         const user = readUser();
         if (!user && !isLoginPage) {
             window.location.replace('login.html');
